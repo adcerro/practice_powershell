@@ -5,23 +5,40 @@ Write-Output "Script written by: adcerro`n"
 
 $serial = wmic bios get serialnumber
 
-Write-Output "Serial Number: $($serial[2])`n"
+$serial = $serial[2].Trim()
 
-Write-Output "Setting stuff up"
+Write-Output "Serial Number: $serial `nSetting stuff up"
 
 # The programs with silent option or that don't require interacting with the installer at all.
-cd $PSScriptRoot\handsfree
-
-Get-ChildItem -Filter *.exe | 
+Get-ChildItem -Path "$PSScriptRoot\silent" -Filter *.exe | 
 Foreach-Object {
     Write-Output "Installing: $($_.Name)"
     Start-Process -FilePath $_.Name -ArgumentList "/S" -Wait
 }
 
-cd ..
+cd $PSScriptRoot
 
 # Specific custom install(s)
 Write-Output "Installing fusion inventory"
-./fusioninventory-agent_windows-x64_2.3.20.exe /acceptlicense /S /runnow /execmode=Service /server=""
+
+$tagCheck = "n"
+while($tagCheck.ToLower() -ne "y"){
+    DO{
+    $dependency = Read-Host 'Dependency acronim'
+    }while([string]::IsNullOrEmpty($dependency))
+
+    $dependency = $dependency.ToUpper()
+
+    DO{
+    $year = Read-Host 'Current year'
+    }while([string]::IsNullOrEmpty($year))
+
+    $tag = "$serial-$dependency-$year"
+
+    Write-Output "`nTag: $tag `n"
+
+    $tagCheck = Read-Host 'Confirm Dependency acronim [y/n]'
+}
+./fusioninventory-agent_windows-x64_2.3.20.exe /acceptlicense /S /runnow /execmode=Service /server="" /tag="$tag"
 
 Write-Output "Finished Script."
