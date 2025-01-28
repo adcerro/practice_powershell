@@ -44,7 +44,7 @@ while($tagCheck.ToLower() -ne "y"){
 
 $server = Get-Content -Path .\server.txt -TotalCount 1
 
-./fusioninventory-agent_windows-x64_2.3.20.exe /acceptlicense /S /runnow /execmode=Service /server=$server /tag=$tag
+./fusioninventory-agent_windows-x64_2.3.20.exe /acceptlicense /S /execmode=Service /server=$server /tag=$tag /runnow
 
 Start-Process "http://127.0.0.1:62354/"
 
