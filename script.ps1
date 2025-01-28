@@ -37,8 +37,15 @@ while($tagCheck.ToLower() -ne "y"){
 
     Write-Output "`nTag: $tag `n"
 
+    Write-Output "REMEMBER TAGS WITH SPACES ARE NOT VALID`n"
+
     $tagCheck = Read-Host 'Confirm Dependency acronim [y/n]'
 }
-./fusioninventory-agent_windows-x64_2.3.20.exe /acceptlicense /S /runnow /execmode=Service /server="" /tag="$tag"
+
+$server = Get-Content -Path .\server.txt -TotalCount 1
+
+./fusioninventory-agent_windows-x64_2.3.20.exe /acceptlicense /S /runnow /execmode=Service /server=$server /tag=$tag
+
+Start-Process "http://127.0.0.1:62354/"
 
 Write-Output "Finished Script."
