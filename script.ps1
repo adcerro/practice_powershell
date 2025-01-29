@@ -13,7 +13,7 @@ Write-Output "Serial Number: $serial `nSetting stuff up"
 Get-ChildItem -Path "$PSScriptRoot\silent" -Filter *.exe | 
 Foreach-Object {
     Write-Output "Installing: $($_.Name)"
-    Start-Process -FilePath $_.Name -ArgumentList "/S" -Wait
+    Start-Process -FilePath $_.FullName -ArgumentList "/S" -Wait
 }
 
 cd $PSScriptRoot
