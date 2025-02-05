@@ -46,8 +46,12 @@ $server = Get-Content -Path .\server.txt -TotalCount 1
 
 ./fusioninventory-agent_windows-x64_2.3.20.exe /acceptlicense /S /execmode=Service /server=$server /tag=$tag /runnow
 
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 5
 
 Start-Process "http://127.0.0.1:62354/"
+
+Write-Output "Opening domain config"
+
+sysdm.cpl
 
 Write-Output "Finished Script."
