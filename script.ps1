@@ -50,6 +50,10 @@ Start-Sleep -Seconds 5
 
 Start-Process "http://127.0.0.1:62354/"
 
+Write-Output "Opening computer management"
+
+compmgmt.msc
+
 Write-Output "Opening domain config"
 
 sysdm.cpl
