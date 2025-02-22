@@ -3,9 +3,9 @@
 
 Write-Output "Script written by: adcerro`n"
 
-$serial = wmic bios get serialnumber
+$serial = (Get-CimInstance Win32_BIOS).SerialNumber
 
-$serial = $serial[2].Trim()
+$serial = $serial.Trim()
 
 Write-Output "Serial Number: $serial `nSetting stuff up"
 
