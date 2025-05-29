@@ -5,20 +5,23 @@ Write-Output "Script written by: adcerro`n"
 
 $serial = (Get-CimInstance Win32_BIOS).SerialNumber
 
-$serial = $serial.Trim()
-
 Write-Output "Serial Number: $serial `nSetting stuff up"
 
-# The programs with silent option or that don't require interacting with the installer at all.
+# The programs that barely need interacting with the installer.
 Get-ChildItem -Path "$PSScriptRoot\silent" -Filter *.exe | 
 Foreach-Object {
     Write-Output "Installing: $($_.Name)"
-    Start-Process -FilePath $_.FullName -ArgumentList "/S" -Wait
+    Start-Process -FilePath $_.FullName -ArgumentList "/S"
 }
+
+# Specific custom install(s)
+# Getting winget
+Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
+
+winget install -e --id M2Team.NanaZip --source winget
 
 cd $PSScriptRoot
 
-# Specific custom install(s)
 Write-Output "Installing fusion inventory"
 
 $tagCheck = "n"
@@ -41,12 +44,16 @@ while($tagCheck.ToLower() -ne "y"){
 
     $tagCheck = Read-Host 'Confirm Dependency acronim [y/n]'
 }
+#FusionInventory without server
+Start-Process -FilePath ./fusioninventory-agent_windows-x64_2.3.20.exe -ArgumentList "/acceptlicense /S /execmode=Service /tag=$tag" -Wait
 
 $server = Get-Content -Path .\server.txt -TotalCount 1
 
-./fusioninventory-agent_windows-x64_2.3.20.exe /acceptlicense /S /execmode=Service /server=$server /tag=$tag /runnow
+#Modify registry to add server
+Set-ItemProperty -Path "HKLM:\SOFTWARE\FusionInventory-Agent" -Name "server" -Value "$server"
 
-Start-Sleep -Seconds 5
+#Restart service to apply the changes
+Restart-Service -Name "FusionInventory-Agent"
 
 Start-Process "http://127.0.0.1:62354/"
 
