@@ -8,7 +8,7 @@ $serial = (Get-CimInstance Win32_BIOS).SerialNumber
 Write-Output "Serial Number: $serial `nSetting stuff up"
 
 # The programs that barely need interacting with the installer.
-Get-ChildItem -Path "$PSScriptRoot\silent" -Filter *.exe | 
+Get-ChildItem -Path "$PSScriptRoot\programs" -Filter *.exe | 
 Foreach-Object {
     Write-Output "Installing: $($_.Name)"
     Start-Process -FilePath $_.FullName -ArgumentList "/S"
