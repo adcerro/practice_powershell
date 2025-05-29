@@ -10,7 +10,7 @@ if %errorlevel%==0 (
 )
 
 :: Your real commands go below this line
-powershell.exe -ExecutionPolicy Bypass -File "%dp0\script.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "%~dp0\script.ps1"
 
 PAUSE
 
