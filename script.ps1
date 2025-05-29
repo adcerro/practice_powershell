@@ -63,6 +63,8 @@ compmgmt.msc
 
 Write-Output "Opening domain config"
 
+Write-Output "Computer Name would be:`n$dependency-$serial"
+
 sysdm.cpl
 
 Write-Output "Finished Script."
