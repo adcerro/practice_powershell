@@ -15,12 +15,10 @@ Foreach-Object {
 }
 
 # Specific custom install(s)
-# Getting winget
-Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
-
-winget install -e --id M2Team.NanaZip --source winget
-
 cd $PSScriptRoot
+
+Write-Output "Installing NanaZip"
+.\NanaZip_5.0.1263.0.msixbundle
 
 Write-Output "Installing fusion inventory"
 
